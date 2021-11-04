@@ -1,10 +1,15 @@
-const http = require("http"); // le paquet http est maintenant disponible, cela est égale à un import
+const express = require("express");// le paquet http est maintenant disponible, cela est égale à un import
 
-const server = http.createServer((req, res) => {
-    
-    res.write("Bonjour !");
-    res.end();
-    return res;
-});
+const app = express();
 
-server.listen(3000);
+app.get('/', (req, res) => {
+    console.log("J'ai reçu une requête.");
+
+    res.send("Bonjour !");
+})
+
+app.get('/aurevoir', (req, res) => { // je crée un nouvelle page 
+    res.send("Au revoir !");
+})
+
+app.listen(3000);
