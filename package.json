@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "webpack --mode development",
+    "dev:watch": "webpack --mode development --watch",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.2.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-jsx": "^4.0.1",
+    "webpack": "^5.58.0",
+    "webpack-cli": "^4.9.0"
+  }
+}
