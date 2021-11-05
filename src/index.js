@@ -1,6 +1,7 @@
+import "@babel/polyfill";
+
 import React from "react";// cet import est a faire sur chaques fichiés js en réact
 import ReactDOM from "react-dom";
-
 import SelectStep from './SelectStep';
 import ScoreBoard from './ScoreBoard';
 import RoundResult from "./RoundResult";
@@ -45,38 +46,33 @@ const App = () => { //composant principal
         }
     }
     
-    function jouer(coup) {
-    let resultatManche = axios.post("/api/jouer", {
-        coup: coup
-    });
+    async function jouer(coup) {
+        let response = await axios.post("/api/jouer", {coup}); // Axios sert à envoyer des requêtes HTTP de manière plus simple.
+        let resultatManche = response.data;
     
-    if (resultatManche === true) {
-        // la joueuse a gagné
-        let nouveauScore = scoreJoueuse + 1;
-            setScoreJoueuse(nouveauScore); // voir RoundResult.js
-        if (nouveauScore === MANCHES_VICTORIEUSES) {
-            setGameState(GAME_STATES.END_WIN)
-        } else {
-            setGameState(GAME_STATES.WIN);
+        if (resultatManche === "GAGNE") {
+            // la joueuse a gagné
+            let nouveauScore = scoreJoueuse + 1;
+                setScoreJoueuse(nouveauScore); // voir RoundResult.js
+            if (nouveauScore === MANCHES_VICTORIEUSES) {
+                setGameState(GAME_STATES.END_WIN)
+            } else {
+                setGameState(GAME_STATES.WIN);
+            }
+        } else if (resultatManche === "PERDU") {
+            let nouveauScore = scoreOrdi + 1;
+            setScoreOrdi(nouveauScore); // voir RoundResult.js
+            
+            if (nouveauScore === MANCHES_VICTORIEUSES) {
+                setGameState(GAME_STATES.END_LOSE)
+            } else {
+                setGameState(GAME_STATES.LOSE)
+            }
+        }else{
+            setGameState(GAME_STATES.TIE) // voir RoundResult.js
         }
-    } else if (resultatManche === false) {
-        let nouveauScore = scoreOrdi + 1;
-        setScoreOrdi(nouveauScore); // voir RoundResult.js
-        
-        if (nouveauScore === MANCHES_VICTORIEUSES) {
-            setGameState(GAME_STATES.END_LOSE)
-        } else {
-            setGameState(GAME_STATES.LOSE)
-        }
-    }else{
-        setGameState(GAME_STATES.TIE) // voir RoundResult.js
     }
-}
 
-    let mainDivStyle = {
-        backgroundColor: "#D3CFFF",
-        height: "100%"
-    };
     //blockGame, contient tout ce qui s'affiche pendant la partie
     const blockGame = (gameState === GAME_STATES.WAITING) ?
         <SelectStep jouer={jouer} /> :
