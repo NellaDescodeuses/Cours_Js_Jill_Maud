@@ -14,5 +14,35 @@ app.get('/', (req, res) => {
 
 //     res.sendFile(__dirname +"/dist/main.js"); //__dirname permet de récupérer l'adresse du dossier dans lequel on se trouve.
 // })
+app.post('/api/jouer', (req, res) => {// la requête post permet de recueillir des données.
+        let coup = req.body.coup;
+        let coupOrdinateur;
+        let hasard = Math.floor(Math.random() * 3);// random des coups pour l'ordi
+    
+        switch (hasard) {// 3 possibilités de coups dans le random
+            case 0:
+                coupOrdinateur = PIERRE;
+                break;
+            case 1:
+                coupOrdinateur = FEUILLE;
+                break;
+            case 2:
+                coupOrdinateur = CISEAU;
+                break;
+        }
+    
+        if ((coup === FEUILLE && coupOrdinateur === PIERRE) ||
+            (coup === CISEAU && coupOrdinateur === FEUILLE) ||
+            (coup === PIERRE && coupOrdinateur === CISEAU)) {
+            /**
+             * coup - coupOrdinateur === 1 || coup - coupOrdinateur == -2
+             */
+            res.send("GAGNE !!");
+        } else if (coup === coupOrdinateur) {
+            return res.send("NUL")
+        } else  {
+            return res.send("PERDU");
+        }
+});
 
 app.listen(3000);
